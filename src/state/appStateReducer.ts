@@ -16,23 +16,21 @@ export type List = {
   tasks: Task[];
 };
 
-export const appStateReducer = (state: AppState, action: Action): AppState => {
+export const appStateReducer = (
+  draft: AppState,
+  action: Action
+): AppState | void => {
   switch (action.type) {
     case "ADD_LIST": {
-      return {
-        ...state,
-        lists: [
-          ...state.lists,
-          {
-            id: nanoid(),
-            text: action.payload,
-            tasks: [],
-          },
-        ],
-      };
+      draft.lists.push({
+        id: nanoid(),
+        text: action.payload,
+        tasks: [],
+      });
+      break;
     }
     default: {
-      return state;
+      break;
     }
   }
 };
