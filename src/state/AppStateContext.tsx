@@ -1,26 +1,34 @@
-import { createContext, useContext, FC } from "react";
+import { createContext, useContext, FC, useReducer, Dispatch } from "react";
+import { appStateReducer, AppState, Task, List } from "./appStateReducer";
+import { Action } from "./actions";
+
+export const useAppState = () => {
+  return useContext(AppStateContext);
+};
 
 const AppStateContext = createContext<AppStateContextProps>(
   {} as AppStateContextProps
 );
 
 export const AppStateProvider: FC = ({ children }) => {
-  const { lists } = appData;
+  const [state, dispatch] = useReducer(appStateReducer, appData);
+  const { lists } = state;
 
   const getTasksByListId = (id: string) => {
     return lists.find((list) => list.id === id)?.tasks || [];
   };
 
   return (
-      <AppStateContext.Provider  value={{ lists, getTasksByListId }}>
-        {children}
-      </AppStateContext.Provider>
-  )
+    <AppStateContext.Provider value={{ lists, getTasksByListId, dispatch }}>
+      {children}
+    </AppStateContext.Provider>
+  );
 };
 
 type AppStateContextProps = {
   lists: List[];
   getTasksByListId(id: string): Task[];
+  dispatch: Dispatch<Action>;
 };
 
 const appData: AppState = {
@@ -41,19 +49,4 @@ const appData: AppState = {
       tasks: [{ id: "c3", text: "Begin to use static typing" }],
     },
   ],
-};
-
-export type AppState = {
-  lists: List[];
-};
-
-type Task = {
-  id: string;
-  text: string;
-};
-
-type List = {
-  id: string;
-  text: string;
-  tasks: Task[];
 };
