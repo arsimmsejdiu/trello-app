@@ -4,6 +4,19 @@ type AddItemButtonProps = {
   dark?: boolean;
 };
 
+export const Menu = styled.nav<AddItemButtonProps>`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 40px;
+  border: none;
+  border-radius: 3px;
+  color: ${(props) => (props.dark ? "#000" : "#fff")};
+  background-color: #ffffff3d;
+`
+
 export const AddItemButton = styled.button<AddItemButtonProps>`
   background-color: #ffffff3d;
   border: none;
@@ -28,6 +41,10 @@ export const NewItemButton = styled.button`
   color: #fff;
   padding: 6px 12px;
   text-align: center;
+
+  &:hover {
+    background-color: #6bbc5a;
+  }
 `;
 
 export const NewItemFormContainer = styled.div`
