@@ -1,6 +1,6 @@
 import { Action } from "./actions";
 import { nanoid } from "nanoid";
-import { findItemIndexById } from "../utils/arrayUtils";
+import { findItemIndexById, moveItem } from "../utils/arrayUtils";
 
 export type AppState = {
   lists: List[];
@@ -38,6 +38,13 @@ export const appStateReducer = (
         id: nanoid(),
         text,
       });
+      break;
+    }
+    case "MOVE_LIST": {
+      const { draggedId, hoverId } = action.payload;
+      const draggedListIndex = findItemIndexById(draft.lists, draggedId);
+      const hoverListIndex = findItemIndexById(draft.lists, hoverId);
+      draft.lists = moveItem(draft.lists, draggedListIndex, hoverListIndex);
       break;
     }
     default: {
